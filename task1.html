@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link href="css/style.css" rel="stylesheet">
+        <style>
+            .h1
+            {
+                color:blue;
+            }
+        </style>
+
+        <script type="text/javascript">
+            function calc()
+            {
+                num1 =document.getElementById('num1').value;
+                num2 =document.getElementById('num2').value;
+                result=parseInt(num1)+parseInt(num2);
+                result=document.getElementById('result').value=result;
+            }
+
+
+
+        </script>
+    </head>
+    <body>
+     <h1 class="h1">sum two numbers<h1>   
+    <input  type="text" id="num1" value="5"/>
+    <input  type="text" id="num2" value="5"/>
+    <input  type="text" id="result"/> 
+    <button type ="button" onclick ="calc()">calc</button>
+    </body>
+</html>
