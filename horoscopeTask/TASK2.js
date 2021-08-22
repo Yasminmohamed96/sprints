@@ -39,21 +39,36 @@ const getBirthMonth=function()
 
 }
 
-const getBirthDay=function()
+const getBirthDay=function(userMonth)
 {
     let flag=false;
+    let monthsEndsAt31=[1,3,5,7,8,10,12];
+    let monthsEndsAt30=[4,6,9,11];
+    
     let userDay=parseInt(prompt("please enter your birth day :"));
     while(flag==false)
     {
-        if (!isNaN(userDay)&&(userDay>=1)&&(userDay<=31))
+        if (
+            !isNaN(userDay)&&(userDay>=1)
+            &&
+            (
+            (((monthsEndsAt31.includes(userMonth))&&(userDay<=31)))
+                ||
+            (((monthsEndsAt30.includes(userMonth))&&(userDay<=30)))
+                ||
+            ((userMonth==2)&&(userDay<=28))    
+            )
+        
+            )
         {
             flag=true;
         }
         else if (userDay==null) break;
-        else
+        else 
         {
-            userDay=prompt("please enter your birth day :");
+            userDay=prompt("please enter a valid birth day :"); 
         }
+      
     }
     return userDay;
 
@@ -127,7 +142,7 @@ if (userName !=null)
             var userMonth=getBirthMonth();
             if(userMonth!=null)
             {
-            var userDay=getBirthDay();
+            var userDay=getBirthDay(userMonth);
             getHoroscope(userName,userMonth,userDay);
             break;
             }
