@@ -1,9 +1,5 @@
 "use strict";
 var count = 0;
-var globalName = '';
-var globalID;
-var seconds = 1000 * 60; //1000 = 1 second in JS
-var timer;
 
 function uuids() {
     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
@@ -11,50 +7,38 @@ function uuids() {
             v = c == 'x' ? r : (r & 0x3 | 0x8);
         return v.toString(16);
     });
-}
-
-//console.log(uuids());
-
-function runTimer() {
-    if (seconds == 60000)
-        timer = setInterval(runTimer, 1000)
-    seconds -= 1000;
-    document.getElementById("timer").innerHTML = '0:' + seconds / 1000;
-    if (seconds <= 0) {
-        clearInterval(timer);
-        logout();
+};
+var valueToClearTimer;
+function countdown(amount = 0) {
+    var seconds = amount;
+    function tick() {
+        var counter = document.getElementById("timer");
+        seconds--;
+        counter.innerHTML = "0:" + (seconds < 10 ? "0" : "") + String(seconds);
+        if (seconds > 0) {
+            valueToClearTimer= setTimeout(tick, 1000);
+        } else {
+            clearTimeout(valueToClearTimer);
+            logout();
+        }
     }
+    tick();
 }
 
 const validateName = function (name) {
     // if the name string not empty then it will remove spaces in the beginning and at the end of it 
 
     if (name === "") {
+        alert("Name must be filled out");
         return false;
     } else return true;
 };
-const getName = function () {
+const getName = function (name) {
+    name = name.trim().toLowerCase();
+    return name;
+    //alert("please enter a valid name ");
 
-    let name = document.querySelector('#user-name').value;
-    console.log(name);
-    if (validateName(name)) {
-        //if not a valid name empty string you will be redirected to the main page
-        name = name.trim().toLowerCase();
-        return name;
-        //alert("please enter a valid name ");
-    }
 
-};
-
-const getGroupName = function () {
-
-    let groupName = document.querySelector('#Group-name').value;
-    console.log(groupName);
-    if (validateName(groupName)) {
-        //if not a valid name empty string you will be redirected to the main page
-        groupName = groupName.trim().toLowerCase();
-        return groupName;
-    }
 };
 
 const addUser = function (userName) {
@@ -82,23 +66,28 @@ const addGroup = function (group_name) {
     //save data in local storage -- subscribe to pusher
 };
 const addUserAndGroup = function () {
-    runTimer();
-    let name = getName();
-    let group_name = getGroupName();
-    addUser(name);
-
-    //hide login div
-    document.querySelector('#intro').style.display = "none";
-
-    //if the group not exists before then add it  else show chat
-    if (!(checkIfGroupExists(group_name) === true)) {
-        addGroup(group_name);
+    let name = document.querySelector('#user-name').value;
+    let groupName = document.querySelector('#Group-name').value;
+    if ((validateName(groupName)) && (validateName(name))) {
+        name = getName(name);
+        groupName = getName(groupName);
+        addUser(name);
+        //hide login div
+        document.querySelector('#intro').style.display = "none";
+        //if the group not exists before then add it  else show chat
+        if (!(checkIfGroupExists(groupName) === true)) {
+            addGroup(groupName);
+        }
+        //show chat ui div
+        document.querySelector('#chat').style.display = "block";
+        clearTimeout()
+        countdown(60);
     }
-
-    //show chat ui div
-    document.querySelector('#chat').style.display = "block";
-
-    alert(name, group_name);
+    else {
+        document.querySelector('#intro').style.display = "block";
+        document.querySelector('#chat').style.display = "none";
+        alert("please fill all inputs ");
+    }
 };
 
 const show_users_messages = function (user_message, dateTime) {
@@ -149,9 +138,8 @@ const show_my_message = function (my_message, dateTime) {
 
 const send = function () {
     console.log("send");
-
-    seconds = 1000 * 60;
-
+    clearTimeout(valueToClearTimer);
+    countdown(60);
     var textarea = document.querySelector('#message');
     var my_message = '(You)' + ':' + textarea.value;
     var today = new Date();
@@ -164,19 +152,15 @@ const send = function () {
 };
 const logout = function () {
     console.log("logout ");
-    debugger;
     //unsubscribe  clear browser storage  back to first screen
     count--;
     localStorage.clear();
-
-    seconds = 0;
     document.querySelector('#intro').style.display = "block";
     document.querySelector('#chat').style.display = "none";
 };
 
 /*to add a new line when enter and alt is pressed */
 const keyboardActions = function (e) {
-    debugger;
     var textarea = document.querySelector('#message');
     if ((e.key == "Enter") && (e.altKey == true)) {
         textarea.value = textarea.value + "\n";
@@ -187,6 +171,7 @@ const keyboardActions = function (e) {
 };
 
 document.querySelector('#add-data').addEventListener("click", addUserAndGroup);
-document.querySelector('#logout').addEventListener("click", logout);
+//countdown calls logout automaticlly when seconds is zero
+document.querySelector('#logout').addEventListener("click", countdown);
 document.querySelector('#send').addEventListener("click", send);
 document.querySelector('#message').addEventListener("keydown", keyboardActions);
