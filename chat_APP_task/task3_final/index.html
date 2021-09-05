@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="style.css"/>
+        <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+        <title>Chat APP</title>
+    </head>
+
+    <body>
+        <!-- first part (div) to login  -->
+        <div id="intro" style="display: block">
+            <div class="container">
+                <h2>Hello please enter your data :</h2>
+                <div class="form-group">
+                    <label for="user-name">User name:</label>
+                    <input type="text" class="form-control" id="user-name" placeholder="Enter user name"
+                        name="user-name" />
+                </div>
+                <div class="form-group">
+                    <label for="Group-name">Group name:</label>
+                    <input type="text" class="form-control" id="Group-name" placeholder="Enter Group name ..."
+                        name="Group-name" />
+                </div>
+                <button type="submit" id="add-data" class="btn btn-danger ">Begin</button>
+            </div>
+        </div>
+
+
+
+        <!-- show users count and logout button  -->
+        <div id="chat" style="display: none">
+            <h1>Chat</h1>
+            <div class="form-inline" id="users-count">
+                <h2 class="h1" id="child"></h2>
+                <!-- <label for="email">Email:</label>
+          <input type="email" class="form-control" id="email" placeholder="Enter email" name="email"> -->
+                <button type="submit" id="logout" class="btn btn-danger">logout</button>
+            </div>
+            <!-- messages send and received  -->
+            <div>
+                <div class="container" class="rounded" class="position-relative">
+                    <div id="main-message-body">
+
+                    <!-- show text area to type the message with submit button  -->
+                    <div>
+                        <div class="form-group">
+                            <label for="message">message:</label>
+                            <textarea class="form-control" rows="3" id="message" name="message"
+                                style="white-space: pre-wrap;"></textarea>
+                        </div>
+                        <button type="submit" id="send" class="btn btn-danger">Send</button>
+                        <div id="message-timer">
+                            <p id="timer">00:00</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script src="script.js"></script>
+
+    </body>
+
+</html>
